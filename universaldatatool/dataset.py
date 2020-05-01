@@ -1,10 +1,10 @@
 import json
-from universaldatatool.camelify import camelify_dict, camelify
-from universaldatatool.interface import Interface
-from universaldatatool.sample import Sample
+from .camelify import camelify_dict, camelify
+from .interface import Interface
+from .sample import Sample
 
 
-class Dataset:
+class Dataset(object):
     def __init__(self, constructor_dict=None, **kwargs):
         self.__dict__["interface"] = None
         self.__dict__["samples"] = None
@@ -69,4 +69,4 @@ class Dataset:
         ):
             self.samples[0][camel_attr] = v
             return
-        super().__setattr__(attr, v)
+        super(Dataset, self).__setattr__(attr, v)

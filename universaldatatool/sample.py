@@ -1,7 +1,7 @@
-from universaldatatool.camelify import camelify_dict
+from .camelify import camelify_dict, camelify
 
 
-class Sample:
+class Sample(object):
 
     param_names = [
         "audioUrl",
@@ -36,3 +36,9 @@ class Sample:
         if camelify(attr) in self.data:
             return self.data[camelify(attr)]
         raise AttributeError(attr)
+
+    def __setattr__(self, attr, v):
+        camel_attr = camelify(attr)
+        if camel_attr in self.param_names:
+            self.data[camel_attr] = v
+        super(Sample, self).__setattr__(attr, v)

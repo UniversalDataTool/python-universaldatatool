@@ -1,7 +1,7 @@
-from universaldatatool.camelify import camelify_dict, camelify
+from .camelify import camelify_dict, camelify
 
 
-class Interface:
+class Interface(object):
 
     param_names = [
         "type",
@@ -46,4 +46,4 @@ class Interface:
         camel_attr = camelify(attr)
         if camel_attr in self.param_names:
             self.params[camel_attr] = v
-        super().__setattr__(attr, v)
+        super(Interface, self).__setattr__(attr, v)
