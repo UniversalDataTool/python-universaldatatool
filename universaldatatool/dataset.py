@@ -48,6 +48,19 @@ class Dataset(object):
     def to_json_string(self):
         return json.dumps(self.to_dict(), sort_keys=True)
 
+    def to_legacy_json_string(self):
+        legacy_dict = {}
+        legacy_dict["interface"] = self.interface.to_dict()
+        if "labels" in legacy_dict["interface"]:
+            legacy_dict["interface"]["availableLabels"] = legacy_dict["interface"][
+                "labels"
+            ]
+        legacy_dict["taskData"] = [s.to_dict() for s in self.samples]
+        legacy_dict["taskOutput"] = [
+            s.to_dict().get("annotation", None) for s in self.samples
+        ]
+        return json.dumps(legacy_dict, sort_keys=True)
+
     def __getattr__(self, attr):
         camel_attr = camelify(attr)
         if camel_attr in Interface.param_names:

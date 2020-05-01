@@ -40,10 +40,13 @@ class Interface(object):
     def __getattr__(self, attr):
         if camelify(attr) in self.params:
             return self.params[camelify(attr)]
+        if attr == "annotation":
+            return None
         raise AttributeError(attr)
 
     def __setattr__(self, attr, v):
         camel_attr = camelify(attr)
         if camel_attr in self.param_names:
             self.params[camel_attr] = v
+            return
         super(Interface, self).__setattr__(attr, v)

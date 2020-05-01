@@ -41,4 +41,5 @@ class Sample(object):
         camel_attr = camelify(attr)
         if camel_attr in self.param_names:
             self.data[camel_attr] = v
+            return
         super(Sample, self).__setattr__(attr, v)
