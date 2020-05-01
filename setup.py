@@ -18,6 +18,7 @@ setup(
         "Interact with any kind of kind of data directly in a jupyter notebook."
     ),
     long_description=long_description,
+    long_description_content_type="text/markdown",
     author="Severin Ibarluzea",
     author_email="seve@wao.ai",
     url="https://github.com/UniversalDataTool/python-universaldatatool",
