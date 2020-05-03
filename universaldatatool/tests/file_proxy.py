@@ -15,7 +15,7 @@ class TestLocalFileProxyServer(object):
             "test_client_id", {"test_file_id.txt": testfile_content},
         )
         file_content = requests.get(
-            "http://localhost:3000/test_client_id/test_file_id.txt"
+            "https://localfileproxy.universaldatatool.com/test_client_id/test_file_id.txt"
         )
         assert file_content.text == testfile_content.decode("ascii")
 

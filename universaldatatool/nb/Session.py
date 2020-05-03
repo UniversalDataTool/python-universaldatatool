@@ -4,10 +4,11 @@ import random
 import string
 import posixpath
 from urllib.parse import urljoin
+from .LocalFileProxyServer import LocalFileProxyServer
 
 # TODO this should be configurable
 collaborative_session_server = "https://udt-collaboration-server.now.sh"
-local_file_proxy_server = "http://localhost:3000"
+local_file_proxy_server = "https://localfileproxy.universaldatatool.com"
 
 
 def random_string(stringLength=8):
@@ -20,6 +21,7 @@ class Session(object):
         self.running = False
         self.file_url_to_proxied_url = {}
         self.proxied_url_to_file_url = {}
+        self.file_id_to_path = {}
 
     def start(self, dataset):
         self.running = True
@@ -27,8 +29,13 @@ class Session(object):
         dataset.online_session = self
         self.localfileproxy_client_id = random_string(16)
         self.create_collaborative_session(dataset)
+        if len(self.file_id_to_path.keys()) > 0:
+            self.file_proxy_server = LocalFileProxyServer()
+            self.file_proxy_server.start(
+                self.localfileproxy_client_id, self.file_id_to_path
+            )
 
-    def create_collaborative_session(self, dataset, proxy_files=False):
+    def create_collaborative_session(self, dataset, proxy_files=True):
         req_url = "{}/{}".format(collaborative_session_server, "api/session")
         # TODO remove legacy dataset conversion when collaboartive server supports it
         response = requests.post(
@@ -56,10 +63,12 @@ class Session(object):
                 local_file_proxy_server,
                 posixpath.join(self.localfileproxy_client_id, file_id,),
             )
-            print(proxied_url)
             self.file_url_to_proxied_url[file_url] = proxied_url
             self.proxied_url_to_file_url[proxied_url] = file_url
+            self.file_id_to_path[file_id] = file_url[len("file://") :]
         return proxied_url
 
     def stop(self):
         self.running = False
+        if self.file_proxy_server is not None:
+            self.file_proxy_server.stop()

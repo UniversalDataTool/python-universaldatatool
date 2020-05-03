@@ -112,4 +112,4 @@ class Dataset(object):
         udt.nb.open(self)
 
     def edit_online(self):
-        udt.nb.edit_online(self)
+        return udt.nb.edit_online(self)

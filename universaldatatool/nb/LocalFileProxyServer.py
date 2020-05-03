@@ -29,7 +29,7 @@ class LocalFileProxyServer(object):
                     b"file",
                     self.client_id.encode("ascii"),
                     file_id.encode("ascii"),
-                    self.file_id_path_map[file_id],
+                    open(self.file_id_path_map[file_id], "rb").read(),
                 ]
             )
 
@@ -40,7 +40,7 @@ class LocalFileProxyServer(object):
         context = zmq.Context()
         self.socket = context.socket(zmq.DEALER)
 
-        self.socket.connect("tcp://127.0.0.1:2900")
+        self.socket.connect("tcp://localfileproxy.universaldatatool.com:2900")
 
         self.heartbeat_thread = threading.Thread(
             name="poll_heartbeat", target=self.send_heartbeat_every_5s
