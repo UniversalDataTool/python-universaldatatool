@@ -1,4 +1,18 @@
 from .camelify import camelify_dict, camelify
+import os
+
+
+def correct_param(name, value):
+    if name == "img" and not value.startswith("http"):
+        name = "imagePath"
+    if name.endswith("Path"):
+        name = name[:-4] + "Url"
+        value = "file://" + os.path.abspath(value)
+    elif name == "audio" or name == "image" or name == "pdf" or name == "video":
+        name = name + "Url"
+        if not value.startswith("http"):
+            value = "file://" + os.path.abspath(value)
+    return name, value
 
 
 class Sample(object):
@@ -16,15 +30,37 @@ class Sample(object):
         "annotation",
         "videoFrameAt",
         "videoFrame",
+        "audio",
+        "image",
+        "img",
+        "pdf",
+        "video",
+        "audioPath",
+        "imagePath",
+        "pdfPath",
+        "videoPath",
     ]
     data = {}
 
     def __init__(self, constructor_dict={}, **kwargs):
-        self.data = constructor_dict.copy()
-        self.data.update(camelify_dict(kwargs))
+        data = constructor_dict.copy()
+        data.update(camelify_dict(kwargs))
+        self.data = {}
+        for name, value in data.items():
+            n, v = correct_param(name, value)
+            self.data[n] = v
 
-    def to_dict(self):
-        return self.data
+    def to_dict(self, proxy_files=False, session=None):
+        if proxy_files == False:
+            return self.data
+        else:
+            ret_data = self.data.copy()
+            # create a proxied version of any local files
+            url_keys = ["imageUrl", "pdfUrl", "videoUrl", "audioUrl"]
+            for url_key in url_keys:
+                if url_key in ret_data and ret_data[url_key].startswith("file://"):
+                    ret_data[url_key] = session.get_proxied_file_url(ret_data[url_key])
+            return ret_data
 
     def __getitem__(self, key):
         return self.data[key]

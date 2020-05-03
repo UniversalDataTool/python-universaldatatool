@@ -28,7 +28,7 @@ class Interface(object):
         self.params = constructor_dict.copy()
         self.params.update(camelify_dict(kwargs))
 
-    def to_dict(self):
+    def to_dict(self, **kwargs):
         return self.params
 
     def __getitem__(self, key):

@@ -1,4 +1,4 @@
-from ..dataset import Dataset
+from .. import Dataset
 from random import randint
 from IPython.display import display, HTML
 
