@@ -113,3 +113,6 @@ class Dataset(object):
 
     def edit_online(self):
         return udt.nb.edit_online(self)
+
+    def sync(self):
+        self.online_session.sync_changes()

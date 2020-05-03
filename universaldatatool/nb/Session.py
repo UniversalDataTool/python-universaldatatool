@@ -72,3 +72,20 @@ class Session(object):
         self.running = False
         if self.file_proxy_server is not None:
             self.file_proxy_server.stop()
+
+    def sync_changes(self):
+        if not self.running:
+            raise "Not running"
+        response = requests.get(
+            "{}/{}/{}".format(
+                collaborative_session_server, "/api/session", self.collab_session_id
+            )
+        ).json()
+
+        # TODO make adjustments from legacy version
+
+        latest_udt = response["udt_json"]
+        if "taskOutput" not in latest_udt:
+            return
+        for i, output in enumerate(latest_udt["taskOutput"]):
+            self.dataset.samples[i].annotation = output

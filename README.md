@@ -33,10 +33,11 @@ file = udt.File()
 
 ## TODOs
 
-- [ ] `image_path`, `video_path` etc. support
+- [x] `image_path`, `video_path` etc. support
 - [ ] Better Docs
 - [ ] Usage Examples
 - [ ] Load CSV or JSON from files
 - [ ] Collaborative synchronization w/ universaldatatool.com
+- [ ] `edit`/`open` should check that there are no local paths
 - [ ] Helpful stringification
 - [ ] Make JupyterLab Extension [1](https://github.com/jupyterlab/extension-cookiecutter-ts) [2](https://github.com/jupyterlab/extension-examples) [3](https://github.com/wolfv/jupyterlab-dynext)
