@@ -10,6 +10,7 @@ class Dataset(object):
         self.__dict__["interface"] = None
         self.__dict__["samples"] = None
         self.__dict__["online_session"] = None
+        self.__dict__["proxied_file_session"] = None
 
         interface_kwargs = {}
         first_sample_kwargs = {}
@@ -57,25 +58,30 @@ class Dataset(object):
 
     def to_dict(self, **kwargs):
         return_dict = {}
-        return_dict["interface"] = self.interface.to_dict(**kwargs)
-        return_dict["samples"] = [sample.to_dict(**kwargs) for sample in self.samples]
+        return_dict["interface"] = self.interface.to_dict(
+            session=self.proxied_file_session, **kwargs
+        )
+        return_dict["samples"] = [
+            sample.to_dict(session=self.proxied_file_session, **kwargs)
+            for sample in self.samples
+        ]
         return return_dict
 
     def to_json_string(self, **kwargs):
-        return json.dumps(self.to_dict(), sort_keys=True)
+        return json.dumps(self.to_dict(**kwargs), sort_keys=True)
 
-    def to_legacy_json_string(self, **kwargs):
-        legacy_dict = {}
-        legacy_dict["interface"] = self.interface.to_dict(**kwargs)
-        if "labels" in legacy_dict["interface"]:
-            legacy_dict["interface"]["availableLabels"] = legacy_dict["interface"][
-                "labels"
-            ]
-        legacy_dict["taskData"] = [s.to_dict(**kwargs) for s in self.samples]
-        legacy_dict["taskOutput"] = [
-            s.to_dict(**kwargs).get("annotation", None) for s in self.samples
-        ]
-        return json.dumps(legacy_dict, sort_keys=True)
+    # def to_legacy_json_string(self, **kwargs):
+    #     legacy_dict = {}
+    #     legacy_dict["interface"] = self.interface.to_dict(**kwargs)
+    #     if "labels" in legacy_dict["interface"]:
+    #         legacy_dict["interface"]["availableLabels"] = legacy_dict["interface"][
+    #             "labels"
+    #         ]
+    #     legacy_dict["taskData"] = [s.to_dict(**kwargs) for s in self.samples]
+    #     legacy_dict["taskOutput"] = [
+    #         s.to_dict(**kwargs).get("annotation", None) for s in self.samples
+    #     ]
+    #     return json.dumps(legacy_dict, sort_keys=True)
 
     def __getattr__(self, attr):
         camel_attr = camelify(attr)
@@ -113,6 +119,18 @@ class Dataset(object):
 
     def edit_online(self):
         return udt.nb.edit_online(self)
+
+    def edit_local(self):
+        return udt.nb.edit_local(self)
+
+    def stop_editing(self):
+        if self.online_session is not None:
+            self.online_session.stop()
+            self.online_session = None
+
+        if self.proxied_file_session is not None:
+            self.proxied_file_session.stop()
+            self.proxied_file_session = None
 
     def sync(self):
         self.online_session.sync_changes()

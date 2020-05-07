@@ -54,12 +54,18 @@ class Sample(object):
         if proxy_files == False:
             return self.data
         else:
+            if session is None:
+                raise ValueError(
+                    "Cannot proxy files with a ProxiedFileSession (session=None in Sample.to_dict)"
+                )
             ret_data = self.data.copy()
             # create a proxied version of any local files
             url_keys = ["imageUrl", "pdfUrl", "videoUrl", "audioUrl"]
             for url_key in url_keys:
                 if url_key in ret_data and ret_data[url_key].startswith("file://"):
-                    ret_data[url_key] = session.get_proxied_file_url(ret_data[url_key])
+                    proxied_url = session.get_proxied_file_url(ret_data[url_key])
+                    ret_data["original" + url_key.capitalize()] = ret_data[url_key]
+                    ret_data[url_key] = proxied_url
             return ret_data
 
     def __getitem__(self, key):

@@ -2,11 +2,27 @@ import zmq
 from os import path
 import threading
 import time
+import string
+import random
+import posixpath
+import re
+from base64 import b64encode
+
+public_local_file_proxy_server = "https://localfileproxy.universaldatatool.com"
+
+
+def random_string(stringLength=8):
+    letters = string.ascii_lowercase + string.digits + string.ascii_uppercase
+    return "".join(random.choice(letters) for i in range(stringLength))
 
 
 class ZMQLocalFileProxyServer(object):
     def __init__(self):
         self.running = False
+        self.file_id_to_path = {}
+        self.file_url_to_proxied_url = {}
+        self.proxied_url_to_file_url = {}
+        self.client_id = random_string(16)
 
     def send_heartbeat(self):
         self.socket.send_multipart(
@@ -22,20 +38,45 @@ class ZMQLocalFileProxyServer(object):
                 time.sleep(5 / 100)
 
     def send_file(self, file_id):
-        if file_id in self.file_id_path_map:
+        if file_id in self.file_id_to_path:
             self.socket.send_multipart(
                 [
                     b"",
                     b"file",
                     self.client_id.encode("ascii"),
                     file_id.encode("ascii"),
-                    open(self.file_id_path_map[file_id], "rb").read(),
+                    open(self.file_id_to_path[file_id], "rb").read(),
                 ]
             )
 
-    def start(self, client_id, file_id_path_map):
-        self.client_id = client_id
-        self.file_id_path_map = file_id_path_map
+    def get_addr(self, file_id):
+        return "{}/{}/{}".format(
+            public_local_file_proxy_server, self.client_id, file_id
+        )
+
+    def get_proxied_file_url(self, file_url):
+        if file_url in self.file_url_to_proxied_url:
+            return self.file_url_to_proxied_url[file_url]
+
+        extension = file_url.split(".")[-1]
+        if len(extension) > 8 or "/" in extension:
+            extension = ""
+        file_name = file_url.split("/")[-1].split(".")[0]
+        file_id = (
+            random_string(8)
+            + "_"
+            + re.sub(r"[^a-zA-Z0-9_\-]", "", file_name)
+            + "."
+            + extension
+        )
+        proxied_url = self.get_addr(posixpath.join(self.client_id, file_id,),)
+
+        self.file_url_to_proxied_url[file_url] = proxied_url
+        self.proxied_url_to_file_url[proxied_url] = file_url
+        self.file_id_to_path[file_id] = file_url[len("file://") :]
+        return proxied_url
+
+    def start(self):
         self.running = True
         context = zmq.Context()
         self.socket = context.socket(zmq.DEALER)

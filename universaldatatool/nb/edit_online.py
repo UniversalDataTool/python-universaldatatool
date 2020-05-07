@@ -1,6 +1,8 @@
 from ..dataset import Dataset
 import zmq
-from .Session import Session
+from .CollaborativeSession import CollaborativeSession
+from .WebLocalFileProxyServer import WebLocalFileProxyServer
+from .ZMQLocalFileProxyServer import ZMQLocalFileProxyServer
 from IPython.display import Markdown, display
 
 
@@ -11,7 +13,9 @@ def edit_online(constructor_dict, **kwargs):
     else:
         dataset = Dataset(constructor_dict, **kwargs)
 
-    dataset.online_session = Session()
+    dataset.online_session = CollaborativeSession()
+    dataset.proxied_file_session = ZMQLocalFileProxyServer()
+    dataset.proxied_file_session.start()
     dataset.online_session.start(dataset)
 
     url = "https://universaldatatool.com?s={}".format(
