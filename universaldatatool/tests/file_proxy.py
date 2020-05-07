@@ -1,13 +1,13 @@
 import universaldatatool as udt
-from universaldatatool.nb.LocalFileProxyServer import LocalFileProxyServer
+from universaldatatool.nb.ZMQLocalFileProxyServer import ZMQLocalFileProxyServer
 from universaldatatool.nb.Session import local_file_proxy_server
 from os import path
 import requests
 
 
-class TestLocalFileProxyServer(object):
+class TestZMQLocalFileProxyServer(object):
     def test_localfileproxy_server(self):
-        server = LocalFileProxyServer()
+        server = ZMQLocalFileProxyServer()
         testfile_content = open(
             path.join(path.dirname(__file__), "testfile.txt"), "rb"
         ).read()

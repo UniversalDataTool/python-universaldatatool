@@ -4,7 +4,7 @@ import threading
 import time
 
 
-class LocalFileProxyServer(object):
+class ZMQLocalFileProxyServer(object):
     def __init__(self):
         self.running = False
 

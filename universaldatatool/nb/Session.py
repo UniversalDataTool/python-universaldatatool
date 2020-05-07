@@ -4,7 +4,7 @@ import random
 import string
 import posixpath
 from urllib.parse import urljoin
-from .LocalFileProxyServer import LocalFileProxyServer
+from .ZMQLocalFileProxyServer import ZMQLocalFileProxyServer
 
 # TODO this should be configurable
 collaborative_session_server = "https://udt-collaboration-server.now.sh"
@@ -30,7 +30,7 @@ class Session(object):
         self.localfileproxy_client_id = random_string(16)
         self.create_collaborative_session(dataset)
         if len(self.file_id_to_path.keys()) > 0:
-            self.file_proxy_server = LocalFileProxyServer()
+            self.file_proxy_server = ZMQLocalFileProxyServer()
             self.file_proxy_server.start(
                 self.localfileproxy_client_id, self.file_id_to_path
             )
