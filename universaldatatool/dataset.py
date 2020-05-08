@@ -9,7 +9,7 @@ class Dataset(object):
     def __init__(self, constructor_dict=None, **kwargs):
         self.__dict__["interface"] = None
         self.__dict__["samples"] = None
-        self.__dict__["online_session"] = None
+        self.__dict__["collaborative_session"] = None
         self.__dict__["proxied_file_session"] = None
 
         interface_kwargs = {}
@@ -42,6 +42,17 @@ class Dataset(object):
             user_sample_list = constructor_dict["samples"]
         if "samples" in kwargs:
             user_sample_list = kwargs["samples"]
+
+        # plural syntaxes, e.g. image_paths
+        for singular_key in Sample.param_names:
+            plural_key = singular_key + "s"
+            if plural_key in kwargs and isinstance(kwargs[plural_key], list):
+                user_sample_list = []
+                for val in kwargs[plural_key]:
+                    d = {}
+                    d[singular_key] = val
+                    user_sample_list.append(d)
+
         if user_sample_list is not None:
             self.samples = []
             for sample_obj in user_sample_list:
@@ -57,6 +68,8 @@ class Dataset(object):
                 self.samples = []
 
     def to_dict(self, **kwargs):
+        if self.proxied_file_session is None and kwargs.get("proxy_files", False):
+            self.proxy_files()
         return_dict = {}
         return_dict["interface"] = self.interface.to_dict(
             session=self.proxied_file_session, **kwargs
@@ -69,19 +82,6 @@ class Dataset(object):
 
     def to_json_string(self, **kwargs):
         return json.dumps(self.to_dict(**kwargs), sort_keys=True)
-
-    # def to_legacy_json_string(self, **kwargs):
-    #     legacy_dict = {}
-    #     legacy_dict["interface"] = self.interface.to_dict(**kwargs)
-    #     if "labels" in legacy_dict["interface"]:
-    #         legacy_dict["interface"]["availableLabels"] = legacy_dict["interface"][
-    #             "labels"
-    #         ]
-    #     legacy_dict["taskData"] = [s.to_dict(**kwargs) for s in self.samples]
-    #     legacy_dict["taskOutput"] = [
-    #         s.to_dict(**kwargs).get("annotation", None) for s in self.samples
-    #     ]
-    #     return json.dumps(legacy_dict, sort_keys=True)
 
     def __getattr__(self, attr):
         camel_attr = camelify(attr)
@@ -117,6 +117,15 @@ class Dataset(object):
     def edit(self):
         udt.nb.open(self)
 
+    def proxy_files(self, local_web_server=False):
+        if self.proxied_file_session is not None:
+            self.stop_editing()
+        if local_web_server:
+            self.proxied_file_session = udt.nb.WebLocalFileProxyServer()
+        else:
+            self.proxied_file_session = udt.nb.ZMQLocalFileProxyServer()
+        self.proxied_file_session.start()
+
     def edit_online(self):
         return udt.nb.edit_online(self)
 
@@ -124,13 +133,23 @@ class Dataset(object):
         return udt.nb.edit_local(self)
 
     def stop_editing(self):
-        if self.online_session is not None:
-            self.online_session.stop()
-            self.online_session = None
+        if self.collaborative_session is not None:
+            self.collaborative_session.stop()
+            self.collaborative_session = None
 
         if self.proxied_file_session is not None:
             self.proxied_file_session.stop()
             self.proxied_file_session = None
 
     def sync(self):
-        self.online_session.sync_changes()
+        self.collaborative_session.sync_changes()
+
+    def __str__(self):
+        return "<Dataset {} ({} samples)>".format(
+            self.interface.type, len(self.samples)
+        )
+
+    def __repr__(self):
+        return "<Dataset {} ({} samples)>".format(
+            self.interface.type, len(self.samples)
+        )

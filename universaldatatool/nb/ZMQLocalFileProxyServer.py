@@ -69,7 +69,7 @@ class ZMQLocalFileProxyServer(object):
             + "."
             + extension
         )
-        proxied_url = self.get_addr(posixpath.join(self.client_id, file_id,),)
+        proxied_url = self.get_addr(file_id)
 
         self.file_url_to_proxied_url[file_url] = proxied_url
         self.proxied_url_to_file_url[proxied_url] = file_url

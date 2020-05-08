@@ -31,12 +31,3 @@ class TestDatasetLoading(object):
         proxied_dict = ds.to_dict(proxy_files=True)
         assert proxied_dict["samples"][0]["imageUrl"].startswith("http")
         assert "test_localfileproxy" in proxied_dict["samples"][0]["imageUrl"]
-
-    # def test_create_session(self):
-    #     session = Session()
-    #     session.start(
-    #         udt.Dataset(
-    #             type="image_classification",
-    #             image_path="/home/seve/downloads/birds/izJiyLE.png",
-    #         )
-    #     )

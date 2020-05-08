@@ -24,8 +24,15 @@ def open(constructor_dict={}, **kwargs):
     udt_notebook_instances[udt_id] = dataset
 
     html_string = """
-    <div id="{udt_id}"></div>
-    <script type="text/javascript" src="https://s3.amazonaws.com/asset.workaround.online/tmp/vanilla.js"></script>
+    <style>
+    .udt .rendered_html img {{
+        max-width: none;
+    }}
+    </style>
+    <div style="display: flex;width: 100%;">
+        <div style="width: 100%;" class="udt" id="{udt_id}"></div>
+    </div>
+    <script type="text/javascript" src="https://universaldatatool.com/vanilla.js"></script>
     <script type="text/javascript">
     window.UniversalDataTool.open({{
         container: "{udt_id}",
@@ -45,7 +52,7 @@ __udt_last_changed.samples[${{ index }}].annotation = ${{JSON.stringify(output)}
         }}
     }})
     </script>""".format(
-        udt_id=udt_id, udt_json=dataset.to_legacy_json_string()
+        udt_id=udt_id, udt_json=dataset.to_json_string(proxy_files=True)
     ).strip()
 
     display(HTML(html_string))

@@ -37,7 +37,7 @@ file = udt.File()
 - [ ] Better Docs
 - [ ] Usage Examples
 - [ ] Load CSV or JSON from files
-- [ ] Collaborative synchronization w/ universaldatatool.com
-- [ ] `edit`/`open` should check that there are no local paths
+- [x] Collaborative synchronization w/ universaldatatool.com
+- [x] `edit`/`open` should check that there are no local paths
 - [ ] Helpful stringification
 - [ ] Make JupyterLab Extension [1](https://github.com/jupyterlab/extension-cookiecutter-ts) [2](https://github.com/jupyterlab/extension-examples) [3](https://github.com/wolfv/jupyterlab-dynext)

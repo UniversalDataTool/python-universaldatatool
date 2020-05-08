@@ -45,11 +45,10 @@ class CollaborativeSession(object):
             )
         ).json()
 
-        # TODO convert proxied urls to file urls again
-
-        # TODO remove legacy adjustments
         latest_udt = response["udt_json"]
-        if "taskOutput" not in latest_udt:
+        if "samples" not in latest_udt or "interface" not in latest_udt:
             return
-        for i, output in enumerate(latest_udt["taskOutput"]):
-            self.dataset.samples[i].annotation = output
+
+        for i, sample in enumerate(latest_udt["samples"]):
+            if "annotation" in sample:
+                self.dataset.samples[i].annotation = sample["annotation"]

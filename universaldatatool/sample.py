@@ -85,3 +85,15 @@ class Sample(object):
             self.data[camel_attr] = v
             return
         super(Sample, self).__setattr__(attr, v)
+
+    def __str__(self):
+        ret_string = "Sample:"
+        for k, v in self.data.items():
+            ret_string += "\n{}: {}".format(k.rjust(15), v)
+        return ret_string
+
+    def __repr__(self):
+        ret_string = "Sample:"
+        for k, v in self.data.items():
+            ret_string += "\n{}: {}".format(k.rjust(15), v)
+        return ret_string
