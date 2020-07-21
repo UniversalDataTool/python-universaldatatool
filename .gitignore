@@ -6,3 +6,7 @@
 *.egg-info
 dist
 build
+node_modules
+.cache
+.ipython
+.local
