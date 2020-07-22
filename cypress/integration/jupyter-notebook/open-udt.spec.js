@@ -1,10 +1,12 @@
+const path = require("path")
+
 context("Open UDT Image Classification Dataset", () => {
   it("log into jupyter notebook and create new notebook", () => {
     cy.visit("http://localhost:8888")
     cy.contains("Log in").click()
     cy.contains("New").click()
 
-    cy.wait(500)
+    cy.wait(1000)
 
     const win = cy.window().then(async (win) => {
       console.log({ Jupyter: win.Jupyter })
@@ -14,7 +16,7 @@ context("Open UDT Image Classification Dataset", () => {
       } = await win.Jupyter.new_notebook_widget.contents.new_untitled("", {
         type: "notebook",
       })
-
+      cy.wait(500)
       cy.visit(`http://localhost:8888/notebooks/${name}`)
     })
   })
@@ -41,7 +43,7 @@ context("Open UDT Image Classification Dataset", () => {
 
 ds = udt.Dataset(
     type="image_segmentation",
-    image_paths=["/path/to/birds/good_bird.jpg","/path/to/birds/bird2.jpg"],
+    image_paths=["/home/jovyan/cypress/integration/jupyter-notebook/bird.jpg"],
     labels=["good bird", "bad bird"]
 )
 

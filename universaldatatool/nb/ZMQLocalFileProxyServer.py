@@ -40,17 +40,22 @@ class ZMQLocalFileProxyServer(object):
                 time.sleep(5 / 100)
 
     def send_file(self, file_id):
-        print("sending file " + file_id)
         if file_id in self.file_id_to_path:
-            self.socket.send_multipart(
-                [
-                    b"",
-                    b"file",
-                    self.client_id.encode("ascii"),
-                    file_id.encode("ascii"),
-                    open(self.file_id_to_path[file_id], "rb").read(),
-                ]
-            )
+            try:
+                self.socket.send_multipart(
+                    [
+                        b"",
+                        b"file",
+                        self.client_id.encode("ascii"),
+                        file_id.encode("ascii"),
+                        open(self.file_id_to_path[file_id], "rb").read(),
+                    ]
+                )
+            except:
+                print("error sending file: {}".format(file_id))
+                print("located at: {}".format(self.file_id_to_path[file_id]))
+        else:
+            print("file requested that was not in dataset: {}".format(file_id))
 
     def get_addr(self, file_id):
         return "{}/{}/{}".format(

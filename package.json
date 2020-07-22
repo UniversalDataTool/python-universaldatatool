@@ -9,7 +9,7 @@
     "dev": "cypress open",
     "cy:run": "cypress run",
     "test:cypress": "start-server-and-test start:jupyter https://localhost:8888 cy:run",
-    "start:jupyter": "docker run -d -v $(pwd)/universaldatatool:/home/jovyan/universaldatatool -v $(pwd)/setup.py:/home/jovyan/setup.py -v $(pwd)/requirements.txt:/home/jovyan/requirements.txt -p 8888:8888 jupyter/base-notebook:python-3.8.4 start-notebook.sh --NotebookApp.password='sha1:7b8bf7bef0ff:1a09db455431d5ec7a0922e10c46a9646575ab3e'"
+    "start:jupyter": "docker run -d -v $(pwd)/universaldatatool:/home/jovyan/universaldatatool -v $(pwd)/cypress:/home/jovyan/cypress -v $(pwd)/setup.py:/home/jovyan/setup.py -v $(pwd)/requirements.txt:/home/jovyan/requirements.txt -p 8888:8888 jupyter/base-notebook:python-3.8.4 start-notebook.sh --NotebookApp.password='sha1:7b8bf7bef0ff:1a09db455431d5ec7a0922e10c46a9646575ab3e'"
   },
   "devDependencies": {
     "cypress": "^4.10.0"
