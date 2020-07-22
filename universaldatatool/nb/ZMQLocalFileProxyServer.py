@@ -9,6 +9,8 @@ import re
 from base64 import b64encode
 
 public_local_file_proxy_server = "https://localfileproxy.universaldatatool.com"
+# public_local_file_proxy_server = "http://localhost:3000"
+secret = b"default_secret"
 
 
 def random_string(stringLength=8):
@@ -26,7 +28,7 @@ class ZMQLocalFileProxyServer(object):
 
     def send_heartbeat(self):
         self.socket.send_multipart(
-            [b"", b"client_service_heartbeat", self.client_id.encode("ascii")]
+            [b"", b"client_service_heartbeat", self.client_id.encode("ascii"), secret]
         )
 
     def send_heartbeat_every_5s(self):
@@ -38,6 +40,7 @@ class ZMQLocalFileProxyServer(object):
                 time.sleep(5 / 100)
 
     def send_file(self, file_id):
+        print("sending file " + file_id)
         if file_id in self.file_id_to_path:
             self.socket.send_multipart(
                 [
@@ -81,7 +84,13 @@ class ZMQLocalFileProxyServer(object):
         context = zmq.Context()
         self.socket = context.socket(zmq.DEALER)
 
-        self.socket.connect("tcp://localfileproxy.universaldatatool.com:2900")
+        self.socket.connect(
+            "tcp://{}:2900".format(
+                re.search("https?://([^:]*)", public_local_file_proxy_server).group(1)
+            )
+        )
+
+        self.send_heartbeat()
 
         self.heartbeat_thread = threading.Thread(
             name="poll_heartbeat", target=self.send_heartbeat_every_5s

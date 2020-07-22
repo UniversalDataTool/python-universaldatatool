@@ -80,6 +80,9 @@ class Dataset(object):
         ]
         return return_dict
 
+    def to_json(self, **kwargs):
+        return self.to_dict(**kwargs)
+
     def to_json_string(self, **kwargs):
         return json.dumps(self.to_dict(**kwargs), sort_keys=True)
 
