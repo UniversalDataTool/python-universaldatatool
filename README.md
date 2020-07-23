@@ -58,6 +58,25 @@ ds.open()
 
 # Development
 
+## Running Cypress Tests
+
+Cypress will automatically open a browser and create jupyter notebooks with different test scenarios. It's really fast for developing and testing. To
+use it, you must first run our jupyter docker container, which mounts volumes properly such that universaldatatool can be imported. To do this, run:
+
+```bash
+yarn start:jupyter
+```
+
+A jupyter notebook is now running in the background.
+
+You can now run the cypress tests in development mode by running...
+
+```bash
+yarn cy:run
+```
+
+An electron browser will open with automated tests.
+
 ## How To Test
 
 Each file in the `universaldatatool/tests` directory can be tested with pytest e.g.
