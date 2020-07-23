@@ -41,23 +41,37 @@ def open(constructor_dict={}, **kwargs):
     </div>
     <script type="text/javascript" src="https://universaldatatool.com/vanilla.js"></script>
     <script type="text/javascript">
-    window.UniversalDataTool.open({{
-        container: "{udt_id}",
-        height:700,
-        udt: {udt_json},
-        onSaveTaskOutputItem: (index, output) => {{
-            console.log(`
-            import universaldatatool as __udt
-            __udt_last_changed = __udt.get_udt_notebook_instance("{udt_id}")
-            __udt_last_changed.samples[${{ index }}].annotation = ${{JSON.stringify(output)}}
-            `.trim())
-            Jupyter.notebook.kernel.execute(`
-import universaldatatool as __udt
-__udt_last_changed = __udt.get_udt_notebook_instance("{udt_id}")
-__udt_last_changed.samples[${{ index }}].annotation = ${{JSON.stringify(output)}}
-            `.trim())
+    (() => {{
+    let run;
+    let tries = 0;
+    ;run = () => {{
+        if (!window.UniversalDataTool) {{
+            tries++;
+            if (tries < 100) {{
+                setTimeout(run, 250);
+            }}
+            return;
         }}
-    }})
+        window.UniversalDataTool.open({{
+            container: "{udt_id}",
+            height:700,
+            udt: {udt_json},
+            onSaveTaskOutputItem: (index, output) => {{
+                console.log(`
+                import universaldatatool as __udt
+                __udt_last_changed = __udt.get_udt_notebook_instance("{udt_id}")
+                __udt_last_changed.samples[${{ index }}].annotation = ${{JSON.stringify(output)}}
+                `.trim())
+                Jupyter.notebook.kernel.execute(`
+    import universaldatatool as __udt
+    __udt_last_changed = __udt.get_udt_notebook_instance("{udt_id}")
+    __udt_last_changed.samples[${{ index }}].annotation = ${{JSON.stringify(output)}}
+                `.trim())
+            }}
+        }})
+    }};
+    run();
+    }})();
     </script>""".format(
         udt_id=udt_id, udt_json=dataset.to_json_string(proxy_files=True)
     ).strip()
