@@ -55,7 +55,5 @@ ds = udt.Dataset(
 
     cy.get(".CodeMirror-code").last().type("ds.open()")
     runCell(false)
-    cy.wait(1000)
-    runCell(false)
   })
 })
