@@ -25,8 +25,12 @@ def open(constructor_dict={}, **kwargs):
 
     html_string = """
     <style>
-    .udt .rendered_html img {{
-        max-width: none;
+    .output .output_area .udt img {{
+        max-width: initial;
+        margin-top: 0;
+    }}
+    .output .output_area .udt svg {{
+        max-width: initial;
     }}
     </style>
     <div style="display: flex;width: 100%;">
