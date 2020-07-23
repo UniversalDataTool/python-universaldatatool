@@ -32,6 +32,9 @@ def open(constructor_dict={}, **kwargs):
     .output .output_area .udt svg {{
         max-width: initial;
     }}
+    .udt * {{
+        box-sizing: initial;
+    }}
     </style>
     <div style="display: flex;width: 100%;">
         <div style="width: 100%;" class="udt" id="{udt_id}"></div>
