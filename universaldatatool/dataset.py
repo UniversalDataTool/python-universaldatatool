@@ -6,6 +6,10 @@ import universaldatatool as udt
 
 
 class Dataset(object):
+    """
+    Represents a UniversalDataTool dataset.
+    """
+
     def __init__(self, constructor_dict=None, **kwargs):
         self.__dict__["interface"] = None
         self.__dict__["samples"] = None

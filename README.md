@@ -1,4 +1,4 @@
-# Universal Data Tool Python Module
+# Universal Data Tool Python
 
 Python module for data labeling leveraging the Universal Data Tool.
 
