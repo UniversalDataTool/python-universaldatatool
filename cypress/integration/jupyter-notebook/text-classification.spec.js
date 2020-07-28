@@ -1,6 +1,4 @@
-const path = require("path")
-
-context("Open UDT Image Classification Dataset", () => {
+context("Open UDT Text Classification Dataset", () => {
   it("log into jupyter notebook and create new notebook", () => {
     cy.visit("http://localhost:8888")
     cy.contains("Log in").click()
@@ -9,8 +7,6 @@ context("Open UDT Image Classification Dataset", () => {
     cy.wait(1000)
 
     const win = cy.window().then(async (win) => {
-      console.log({ Jupyter: win.Jupyter })
-
       const {
         name,
       } = await win.Jupyter.new_notebook_widget.contents.new_untitled("", {
@@ -32,9 +28,6 @@ context("Open UDT Image Classification Dataset", () => {
       }
     }
 
-    cy.get(".CodeMirror-code").last().type("!pip install -r requirements.txt")
-    runCell()
-
     cy.get(".CodeMirror-code").last().type("import universaldatatool as udt")
     runCell()
 
@@ -42,9 +35,9 @@ context("Open UDT Image Classification Dataset", () => {
       `
 
 ds = udt.Dataset(
-    type="image_segmentation",
-    image_paths=["/home/jovyan/cypress/integration/jupyter-notebook/bird.jpg"],
-    labels=["good bird", "bad bird"]
+    type="text_classification",
+    documents=["Hello World"],
+    labels=["happy", "sad"]
 )
 
       `.trim()
@@ -55,5 +48,7 @@ ds = udt.Dataset(
 
     cy.get(".CodeMirror-code").last().type("ds.open()")
     runCell(false)
+
+    cy.contains(".udt")
   })
 })
