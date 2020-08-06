@@ -23,7 +23,7 @@ jobs:
           node-version: 12
       - name: Run Prettier Test
         run: |
-          pip install black
+          pip3 install black
           black --check universaldatatool
       - name: Run NPM Tests
         run: npm install && npm run test:cypress
