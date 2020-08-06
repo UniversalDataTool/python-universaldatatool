@@ -11,3 +11,5 @@ node_modules
 .ipython
 .local
 docs/_build
+cypress/videos
+cypress/screenshots

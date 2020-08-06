@@ -1,0 +1,29 @@
+name: Test
+on: ["push", "pull_request"]
+jobs:
+  test:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    name: Test
+    runs-on: ubuntu-18.04
+    # services:
+    #   jupyter:
+    #     image:
+    #     env:
+    #     ports:
+    #       - 3000:3000
+    #     options: >-
+    #       -v
+    # docker run -d -v $(pwd)/universaldatatool:/home/jovyan/universaldatatool -v $(pwd)/cypress:/home/jovyan/cypress -v $(pwd)/setup.py:/home/jovyan/setup.py -v $(pwd)/requirements.txt:/home/jovyan/requirements.txt -p 8888:8888 jupyter/base-notebook:python-3.8.4 start-notebook.sh --NotebookApp.password='sha1:7b8bf7bef0ff:1a09db455431d5ec7a0922e10c46a9646575ab3e'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Run Prettier Test
+        run: |
+          pip install black
+          black --check universaldatatool
+      - name: Run NPM Tests
+        run: npm install && npm run test:cypress
