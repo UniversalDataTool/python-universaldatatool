@@ -29,6 +29,9 @@ def open(constructor_dict={}, **kwargs):
         max-width: initial;
         margin-top: 0;
     }}
+    .MuiButton-root {{
+        font-size: 12px;
+    }}
     .output .output_area .udt svg {{
         max-width: initial;
     }}
@@ -56,6 +59,7 @@ def open(constructor_dict={}, **kwargs):
             container: "{udt_id}",
             height:700,
             udt: {udt_json},
+            disableHotkeys: true,
             onSaveSample: (sample, index) => {{
                 console.log(sample)
                 console.log(`
