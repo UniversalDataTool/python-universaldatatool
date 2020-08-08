@@ -6,7 +6,7 @@
   "author": "seveibar <seveibar@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "cypress open",
+    "start:dev": "cypress open",
     "cy:run": "cypress run",
     "test:cypress": "start-server-and-test start:jupyter https://localhost:8888 cy:run",
     "start:jupyter": "docker run -d -v $(pwd)/universaldatatool:/home/jovyan/universaldatatool -v $(pwd)/cypress:/home/jovyan/cypress -v $(pwd)/setup.py:/home/jovyan/setup.py -v $(pwd)/requirements.txt:/home/jovyan/requirements.txt -v $(pwd)/setup.sh:/home/jovyan/setup.sh -p 8888:8888 jupyter/base-notebook:python-3.8.4 /home/jovyan/setup.sh"

@@ -56,16 +56,17 @@ def open(constructor_dict={}, **kwargs):
             container: "{udt_id}",
             height:700,
             udt: {udt_json},
-            onSaveTaskOutputItem: (index, output) => {{
+            onSaveSample: (sample, index) => {{
+                console.log(sample)
                 console.log(`
                 import universaldatatool as __udt
                 __udt_last_changed = __udt.get_udt_notebook_instance("{udt_id}")
-                __udt_last_changed.samples[${{ index }}].annotation = ${{JSON.stringify(output)}}
+                __udt_last_changed.samples[${{ index }}].annotation = ${{JSON.stringify(sample.annotation)}}
                 `.trim())
                 Jupyter.notebook.kernel.execute(`
-    import universaldatatool as __udt
-    __udt_last_changed = __udt.get_udt_notebook_instance("{udt_id}")
-    __udt_last_changed.samples[${{ index }}].annotation = ${{JSON.stringify(output)}}
+import universaldatatool as __udt
+__udt_last_changed = __udt.get_udt_notebook_instance("{udt_id}")
+__udt_last_changed.samples[${{ index }}].annotation = ${{JSON.stringify(sample.annotation)}}
                 `.trim())
             }}
         }})
