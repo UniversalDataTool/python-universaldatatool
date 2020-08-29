@@ -12,6 +12,7 @@
     "start:jupyter": "docker run -d -v $(pwd)/universaldatatool:/home/jovyan/universaldatatool -v $(pwd)/cypress:/home/jovyan/cypress -v $(pwd)/setup.py:/home/jovyan/setup.py -v $(pwd)/requirements.txt:/home/jovyan/requirements.txt -v $(pwd)/setup.sh:/home/jovyan/setup.sh -p 8888:8888 jupyter/base-notebook:python-3.8.4 /home/jovyan/setup.sh"
   },
   "devDependencies": {
-    "cypress": "^4.10.0"
+    "cypress": "^4.10.0",
+    "cypress-plugin-retries": "^1.5.2"
   }
 }
