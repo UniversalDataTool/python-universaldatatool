@@ -42,7 +42,7 @@ def open(constructor_dict={}, **kwargs):
     <div style="display: flex;width: 100%;">
         <div style="width: 100%;" class="udt" id="{udt_id}"></div>
     </div>
-    <script type="text/javascript" src="https://universaldatatool.com/vanilla.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/universal-data-tool@0.12.2/vanilla.js"></script>
     <script type="text/javascript">
     (() => {{
     let run;

@@ -57,7 +57,7 @@ ds = udt.Dataset(
   })
 
   it("should be able to save output", () => {
-    cy.contains("good bird (g)").click()
+    cy.get(".MuiButtonBase-root").contains("good bird").scrollIntoView().click()
     cy.get(".CodeMirror-code").last().type(
       `
       ds.samples[0]
