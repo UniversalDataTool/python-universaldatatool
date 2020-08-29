@@ -15,7 +15,7 @@ context("Open UDT Image Classification Dataset", () => {
       cy.wait(500)
       cy.visit(`http://localhost:8888/notebooks/${name}`)
       cy.wait(500)
-      cy.reload()
+      win.location.reload()
     })
   })
 

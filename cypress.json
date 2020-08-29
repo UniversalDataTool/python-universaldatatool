@@ -1,5 +1,5 @@
 {
   "env": {
-    "RETRIES": 2
+    "RETRIES": 1
   }
 }
