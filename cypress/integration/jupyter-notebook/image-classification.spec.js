@@ -15,9 +15,7 @@ context("Open UDT Image Classification Dataset", () => {
       cy.wait(500)
       cy.visit(`http://localhost:8888/notebooks/${name}`)
       cy.wait(500)
-      // This guarantees the connection
-      cy.get(".dropdown-toggle").contains("Kernel").click()
-      cy.contains("Reconnect").click()
+      cy.reload()
     })
   })
 
@@ -40,7 +38,7 @@ context("Open UDT Image Classification Dataset", () => {
 
 ds = udt.Dataset(
     type="image_classification",
-    image_paths=["/home/jovyan/cypress/integration/jupyter-notebook/bird.jpg"],
+    image_paths=["/home/jovyan/cypress/assets/jupyter-notebook/bird.jpg"],
     labels=["good bird", "bad bird"]
 )
 
