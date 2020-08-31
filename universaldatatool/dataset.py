@@ -130,7 +130,7 @@ class Dataset(object):
         if local_web_server:
             self.proxied_file_session = udt.nb.WebLocalFileProxyServer()
         else:
-            self.proxied_file_session = udt.nb.ZMQLocalFileProxyServer()
+            self.proxied_file_session = udt.nb.PublicFileProxy()
         self.proxied_file_session.start()
 
     def edit_online(self):

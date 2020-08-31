@@ -39,7 +39,7 @@ context("Open UDT Image Segmentation Dataset", () => {
 
 ds = udt.Dataset(
     type="image_segmentation",
-    image_paths=["/home/jovyan/cypress/assets/jupyter-notebook/bird.jpg"],
+    image_paths=["/home/jovyan/cypress/assets/bird.jpg"],
     labels=["good bird", "bad bird"]
 )
 
