@@ -11,3 +11,4 @@ from .ProxiedFileSession import ProxiedFileSession
 from .CollaborativeSession import CollaborativeSession
 from .WebLocalFileProxyServer import WebLocalFileProxyServer
 from .ZMQLocalFileProxyServer import ZMQLocalFileProxyServer
+from .EmitterLocalFileProxyServer import EmitterLocalFileProxyServer

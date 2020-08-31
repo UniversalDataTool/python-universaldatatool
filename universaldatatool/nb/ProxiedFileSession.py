@@ -6,7 +6,7 @@ import posixpath
 from urllib.parse import urljoin
 from base64 import b64encode
 from .WebLocalFileProxyServer import WebLocalFileProxyServer
-from .ZMQLocalFileProxyServer import ZMQLocalFileProxyServer
+from .EmitterLocalFileProxyServer import EmitterLocalFileProxyServer
 
 
 class ProxiedFileSession(object):
@@ -16,7 +16,7 @@ class ProxiedFileSession(object):
         if local_web_proxy:
             self.file_proxy_server = WebLocalFileProxyServer()
         else:
-            self.file_proxy_server = ZMQLocalFileProxyServer()
+            self.file_proxy_server = EmitterLocalFileProxyServer()
         self.get_proxied_file_url = self.file_proxy_server.get_proxied_file_url
 
     def start(self, dataset, local_web_proxy=False):

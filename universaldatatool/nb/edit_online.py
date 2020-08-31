@@ -3,6 +3,7 @@ import zmq
 from .CollaborativeSession import CollaborativeSession
 from .WebLocalFileProxyServer import WebLocalFileProxyServer
 from .ZMQLocalFileProxyServer import ZMQLocalFileProxyServer
+from .EmitterLocalFileProxyServer import EmitterLocalFileProxyServer
 from IPython.display import Markdown, display
 
 
