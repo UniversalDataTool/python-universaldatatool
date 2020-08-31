@@ -51,7 +51,6 @@ class PublicFileProxy(object):
         self.proxied_url_to_file_url[proxied_url] = file_url
         self.file_id_to_path[file_id] = file_url[len("file://") :]
         self.file_id_to_path[file_id.split(".")[0]] = file_url[len("file://") :]
-        warnings.warn("getting proxied file {} -> {}".format(file_url, proxied_url))
         return proxied_url
 
     def poll_and_respond_to_requests(self):
@@ -70,7 +69,6 @@ class PublicFileProxy(object):
             time.sleep(0.01)
 
     def start(self):
-        warnings.warn("starting proxy")
         self.running = True
 
         access = requests.get("{}/api/channel".format(public_proxy_url)).json()
@@ -80,9 +78,7 @@ class PublicFileProxy(object):
         self.thread = threading.Thread(
             target=self.poll_and_respond_to_requests, daemon=True
         )
-        warnings.warn("response thread started")
         self.thread.start()
 
     def stop(self):
-        warnings.warn("stopping proxy")
         self.running = False
