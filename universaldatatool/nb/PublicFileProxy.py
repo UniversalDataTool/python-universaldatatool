@@ -54,11 +54,14 @@ class PublicFileProxy(object):
         return proxied_url
 
     def poll_and_respond_to_requests(self):
+        # warnings.warn("running on thread...")
         while self.running:
             res = requests.get(
                 public_proxy_url + "/api/{}".format(self.channel_id)
             ).json()
+            # warnings.warn("request with {}".format(",".join(res["requestedFiles"])))
             for fileid in res["requestedFiles"]:
+                # warnings.warn("got a request for {}".format(fileid))
                 if not path.exists(self.file_id_to_path[fileid]):
                     warnings.warn("FILE DOES NOT EXIST (check the path): " + fileid)
                     continue
