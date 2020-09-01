@@ -53,8 +53,8 @@ ds.open()
 - [ ] Make it easy to run tests
 - [ ] Image Segmentation kills jupyter notebook scrolling
 - [ ] Make JupyterLab Extension [1](https://github.com/jupyterlab/extension-cookiecutter-ts) [2](https://github.com/jupyterlab/extension-examples) [3](https://github.com/wolfv/jupyterlab-dynext)
-- [ ] Continuous integration testing via Github Actions
-- [ ] Cypress browser testing
+- [x] Continuous integration testing via Github Actions
+- [x] Cypress browser testing
 
 # Development
 
@@ -84,3 +84,5 @@ Each file in the `universaldatatool/tests` directory can be tested with pytest e
 ```bash
 python -m pytest universaldatatool/tests/example1.py
 ```
+
+## Releasing
