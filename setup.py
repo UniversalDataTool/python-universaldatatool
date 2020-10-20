@@ -11,6 +11,11 @@ version = {}
 with open(os.path.join(_here, "universaldatatool", "version.py")) as f:
     exec(f.read(), version)
 
+with open('requirements.txt') as reqs:
+    install_requires = [
+        line for line in reqs.read().split('\n') if line
+    ]
+
 setup(
     name="universaldatatool",
     version=version["__version__"],
@@ -24,16 +29,13 @@ setup(
     url="https://github.com/UniversalDataTool/python-universaldatatool",
     license="MIT",
     packages=["universaldatatool"],
-    #   install_requires=[
-    #       'dependency==1.2.3',
-    #   ],
-    #   no scripts in this example
-    #   scripts=['bin/a-script'],
+    install_requires=install_requires,
     include_package_data=True,
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Science/Research",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
     ],
 )
